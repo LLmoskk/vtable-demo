@@ -1,0 +1,92 @@
+.demo2-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.demo2-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 10px;
+}
+
+.demo2-header h1 {
+  margin: 0;
+  font-size: 24px;
+  color: #333;
+}
+
+.theme-switch {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.theme-label {
+  font-size: 14px;
+  color: #666;
+  min-width: 70px;
+}
+
+/* Switch 开关样式 */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 30px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: 0.3s;
+  border-radius: 30px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 22px;
+  width: 22px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: 0.3s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:checked + .slider:before {
+  transform: translateX(30px);
+}
+
+.slider-text {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 16px;
+  transition: 0.3s;
+}
+
+input:not(:checked) + .slider .slider-text {
+  left: 8px;
+}
+
+input:checked + .slider .slider-text {
+  right: 8px;
+}

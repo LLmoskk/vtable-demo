@@ -2,7 +2,7 @@ import { useLocalStorageState } from 'ahooks';
 import { useCallback, useMemo } from 'react';
 import { type ColumnDefine } from '@visactor/vtable';
 import { calculateColumnsWidthMap } from '../utils/calculate-column-width';
-import type { Sort } from '../type';
+import type { Sort } from '../../../type';
 
 type UseColumnWidthParams<T extends ColumnDefine> = {
   /** 列配置数组 */

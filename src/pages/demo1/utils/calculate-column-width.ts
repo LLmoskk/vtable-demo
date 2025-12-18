@@ -1,4 +1,4 @@
-import type { Sort } from '../type.ts';
+import type { Sort } from '../../../type.ts';
 
 // 参考文章 https://juejin.cn/post/7091990279565082655
 type Options = {
