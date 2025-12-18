@@ -1,49 +1,78 @@
-name: Deploy
+name: 部署到 GitHub Pages
 
 on:
+  # 在推送到 main 分支时触发
   push:
-    branches:
-      - main
+    branches: [ "main" ]
+  
+  # 允许手动触发工作流
+  workflow_dispatch:
+
+# 设置 GITHUB_TOKEN 的权限以允许部署到 GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# 只允许一个并发部署，跳过正在运行和最新排队之间的运行
+# 但是，不要取消正在进行的运行，因为我们希望让这些生产部署完成
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
 
 jobs:
+  # 构建作业
   build:
-    name: Build
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repo
+      - name: 检出代码
         uses: actions/checkout@v4
-
-      - name: Setup Node
+        
+      - name: 设置 Node.js
         uses: actions/setup-node@v4
-
-      - name: Install dependencies
-        uses: bahmutov/npm-install@v1
-
-      - name: Build project
-        run: npm run build
-
-      - name: Upload production-ready build files
-        uses: actions/upload-artifact@v4
         with:
-          name: production-files
-          path: ./dist
+          node-version: '18'
+          
+      - name: 设置 pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 8
+          
+      - name: 获取 pnpm 存储目录
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+          
+      - name: 设置 pnpm 缓存
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+            
+      - name: 安装依赖
+        run: pnpm install --frozen-lockfile
+        
+      - name: 构建项目
+        run: pnpm run build
+        
+      - name: 设置 Pages
+        uses: actions/configure-pages@v4
+        
+      - name: 上传构建产物
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './dist'
 
+  # 部署作业
   deploy:
-    name: Deploy
-    needs: build
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
-
+    needs: build
     steps:
-      - name: Download artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: production-files
-          path: ./dist
-
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
+      - name: 部署到 GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
