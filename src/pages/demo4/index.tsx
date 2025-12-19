@@ -8,11 +8,14 @@ import { Separator } from '@/components/ui/separator';
 // 模拟数据生成函数
 const generateTableData = () => {
   const data = [];
-  const categories = ['办公用品', '技术设备', '家具', '文具', '电子产品'];
-  const regions = ['华北', '华东', '华南', '西南', '东北'];
-  const months = ['1月', '2月', '3月', '4月', '5月', '6月'];
+  const categories = ['办公用品', '技术设备', '家具', '文具', '电子产品', '服装配饰', '食品饮料', '化妆品', '体育用品', '图书音像'];
+  const regions = ['华北', '华东', '华南', '西南', '东北', '华中', '西北', '港澳台'];
+  const months = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
+  const suppliers = ['供应商A', '供应商B', '供应商C', '供应商D', '供应商E', '供应商F'];
+  const channels = ['线上', '线下', '代理商', '直销', '批发'];
+  const brands = ['品牌A', '品牌B', '品牌C', '品牌D', '品牌E'];
 
-  for (let i = 0; i < 50; i++) {
+  for (let i = 0; i < 100; i++) {
     data.push({
       id: `ID${1000 + i}`,
       category: categories[i % categories.length],
@@ -24,7 +27,22 @@ const generateTableData = () => {
       customerName: `客户${i + 1}`,
       productName: `产品${i + 1}`,
       orderDate: `2024-${String(Math.floor(Math.random() * 12) + 1).padStart(2, '0')}-${String(Math.floor(Math.random() * 28) + 1).padStart(2, '0')}`,
-      status: i % 3 === 0 ? '已完成' : i % 3 === 1 ? '进行中' : '待处理'
+      status: i % 3 === 0 ? '已完成' : i % 3 === 1 ? '进行中' : '待处理',
+      supplier: suppliers[i % suppliers.length],
+      channel: channels[i % channels.length],
+      brand: brands[i % brands.length],
+      cost: Math.floor(Math.random() * 50000) + 5000,
+      discount: (Math.random() * 0.3).toFixed(2),
+      rating: (Math.random() * 2 + 3).toFixed(1),
+      weight: (Math.random() * 10 + 0.5).toFixed(2),
+      volume: (Math.random() * 100 + 10).toFixed(2),
+      tax: Math.floor(Math.random() * 5000) + 500,
+      commission: Math.floor(Math.random() * 3000) + 200,
+      returnRate: (Math.random() * 0.1).toFixed(3),
+      deliveryDays: Math.floor(Math.random() * 10) + 1,
+      warehouse: `仓库${String.fromCharCode(65 + (i % 8))}`,
+      manager: `经理${i % 20 + 1}`,
+      notes: `备注信息${i + 1}`
     });
   }
   return data;
@@ -65,6 +83,12 @@ const columns = [
     format: (value: number) => `¥${value.toLocaleString()}`
   },
   {
+    field: 'cost',
+    title: '成本',
+    width: 100,
+    format: (value: number) => `¥${value.toLocaleString()}`
+  },
+  {
     field: 'quantity',
     title: '数量',
     width: 80
@@ -80,6 +104,21 @@ const columns = [
     width: 120
   },
   {
+    field: 'supplier',
+    title: '供应商',
+    width: 100
+  },
+  {
+    field: 'channel',
+    title: '销售渠道',
+    width: 100
+  },
+  {
+    field: 'brand',
+    title: '品牌',
+    width: 80
+  },
+  {
     field: 'orderDate',
     title: '订单日期',
     width: 120
@@ -88,6 +127,69 @@ const columns = [
     field: 'status',
     title: '状态',
     width: 100
+  },
+  {
+    field: 'discount',
+    title: '折扣率',
+    width: 80,
+    format: (value: string) => `${(parseFloat(value) * 100).toFixed(1)}%`
+  },
+  {
+    field: 'rating',
+    title: '评分',
+    width: 80,
+    format: (value: string) => `${value}★`
+  },
+  {
+    field: 'weight',
+    title: '重量(kg)',
+    width: 90,
+    format: (value: string) => `${value}kg`
+  },
+  {
+    field: 'volume',
+    title: '体积(m³)',
+    width: 90,
+    format: (value: string) => `${value}m³`
+  },
+  {
+    field: 'tax',
+    title: '税费',
+    width: 80,
+    format: (value: number) => `¥${value.toLocaleString()}`
+  },
+  {
+    field: 'commission',
+    title: '佣金',
+    width: 80,
+    format: (value: number) => `¥${value.toLocaleString()}`
+  },
+  {
+    field: 'returnRate',
+    title: '退货率',
+    width: 80,
+    format: (value: string) => `${(parseFloat(value) * 100).toFixed(1)}%`
+  },
+  {
+    field: 'deliveryDays',
+    title: '配送天数',
+    width: 90,
+    format: (value: number) => `${value}天`
+  },
+  {
+    field: 'warehouse',
+    title: '仓库',
+    width: 80
+  },
+  {
+    field: 'manager',
+    title: '负责人',
+    width: 100
+  },
+  {
+    field: 'notes',
+    title: '备注',
+    width: 150
   }
 ];
 
@@ -118,7 +220,7 @@ const Demo4: React.FC = () => {
     frozenRowCount,
     rightFrozenColCount,
     bottomFrozenRowCount,
-    allowFrozenColCount: 5, // 允许用户手动冻结的最大列数
+    allowFrozenColCount: 10, // 允许用户手动冻结的最大列数
     showFrozenIcon,
     maxFrozenWidth,
     unfreezeAllOnExceedsMaxWidth,
@@ -158,7 +260,7 @@ const Demo4: React.FC = () => {
 
   return (
     <div className="p-6 space-y-6">
-      <div className="p-6 rounded-lg border shadow-sm">
+      <div className="sticky top-0 z-10 bg-white p-6 rounded-lg border shadow-md">
         <h2 className="text-xl font-semibold mb-4">冻结配置控制面板</h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -178,8 +280,8 @@ const Demo4: React.FC = () => {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => setFrozenColCount(Math.min(5, frozenColCount + 1))}
-                disabled={frozenColCount >= 5}
+                onClick={() => setFrozenColCount(Math.min(10, frozenColCount + 1))}
+                disabled={frozenColCount >= 10}
               >
                 +
               </Button>
@@ -226,8 +328,8 @@ const Demo4: React.FC = () => {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => setRightFrozenColCount(Math.min(3, rightFrozenColCount + 1))}
-                disabled={rightFrozenColCount >= 3}
+                onClick={() => setRightFrozenColCount(Math.min(5, rightFrozenColCount + 1))}
+                disabled={rightFrozenColCount >= 5}
               >
                 +
               </Button>
@@ -300,7 +402,7 @@ const Demo4: React.FC = () => {
         <div className="bg-white p-4 rounded-lg border shadow-sm">
           <ListTable
             {...normalTableOption}
-            style={{ height: '400px' }}
+            style={{ height: '500px' }}
             onFreezeClick={(args: any) => {
               console.log('冻结列点击事件:', args);
             }}
@@ -311,6 +413,7 @@ const Demo4: React.FC = () => {
           <p>• 顶部冻结 {frozenRowCount} 行，底部冻结 {bottomFrozenRowCount} 行</p>
           <p>• 最大冻结宽度: {maxFrozenWidth}</p>
           <p>• 可以点击表头的冻结图标进行手动冻结/解冻操作</p>
+          <p>• 表格包含 {columns.length} 列，{tableData.length} 行数据，支持横向滚动查看更多列</p>
         </div>
       </div>
 
