@@ -6,7 +6,6 @@ import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { Palette, AlertTriangle, TrendingUp, TrendingDown } from 'lucide-react';
-import './index.css';
 
 // 生成模拟数据
 const generateBusinessData = () => {
@@ -39,6 +38,8 @@ const generateBusinessData = () => {
   return data;
 };
 
+const businessData = generateBusinessData();
+
 function Demo2() {
   const [selectedTheme, setSelectedTheme] = useState('DEFAULT');
   const [enableConditionalFormat, setEnableConditionalFormat] = useState(true);
@@ -54,7 +55,6 @@ function Demo2() {
   ];
 
   // 生成业务数据
-  const businessData = generateBusinessData();
 
   // 自定义主题
   const customTheme = themes.DEFAULT.extends({
@@ -340,12 +340,6 @@ function Demo2() {
             heightMode="autoHeight"
             defaultRowHeight={40}
             defaultHeaderRowHeight={50}
-            hover={{
-              highlightMode: 'cross'
-            }}
-            select={{
-              highlightMode: 'cross'
-            }}
           />
         </div>
       </div>
