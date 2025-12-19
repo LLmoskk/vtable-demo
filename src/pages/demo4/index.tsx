@@ -91,6 +91,9 @@ const columns = [
   }
 ];
 
+const tableData = generateTableData();
+const transposeTableData = generateTableData().slice(0, 20); // 转置表格使用较少数据以便观察
+
 const Demo4: React.FC = () => {
   // 状态管理
   const [frozenColCount, setFrozenColCount] = useState(2);
@@ -101,10 +104,6 @@ const Demo4: React.FC = () => {
   const [maxFrozenWidth] = useState('60%');
   const [unfreezeAllOnExceedsMaxWidth, setUnfreezeAllOnExceedsMaxWidth] = useState(true);
   const [isTransposed, setIsTransposed] = useState(false);
-
-  // 生成表格数据
-  const tableData = generateTableData();
-  const transposeTableData = generateTableData().slice(0, 20); // 转置表格使用较少数据以便观察
 
   // 普通表格配置
   const normalTableOption = {
