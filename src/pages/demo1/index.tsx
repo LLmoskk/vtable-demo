@@ -16,28 +16,31 @@ function Demo1() {
     });
 
     return (
-        <ListTable
-            records={records}
-            columns={vtableColumns}
-            height={800}
-            width={1200}
-            onReady={(tableInstance) => {
-                tableInstanceRef.current = tableInstance as ListTableType;
+        <div className='p-6'>
+            <ListTable
+                records={records}
+                columns={vtableColumns}
+                height={800}
+                width={1200}
+                onReady={(tableInstance) => {
+                    tableInstanceRef.current = tableInstance as ListTableType;
 
-                tableInstance.setPixelRatio(Math.max(window.devicePixelRatio, 2));
+                    tableInstance.setPixelRatio(Math.max(window.devicePixelRatio, 2));
 
-                // 监听列宽调整结束事件
-                tableInstance.on(
-                    TABLE_EVENT_TYPE.RESIZE_COLUMN_END,
-                    (
-                        args: TableEventHandlersEventArgumentMap[typeof TABLE_EVENT_TYPE.RESIZE_COLUMN_END],
-                    ) => {
-                        const { colWidths } = args;
-                        saveColumnWidths(colWidths);
-                    },
-                );
-            }}
-        />
+                    // 监听列宽调整结束事件
+                    tableInstance.on(
+                        TABLE_EVENT_TYPE.RESIZE_COLUMN_END,
+                        (
+                            args: TableEventHandlersEventArgumentMap[typeof TABLE_EVENT_TYPE.RESIZE_COLUMN_END],
+                        ) => {
+                            const { colWidths } = args;
+                            saveColumnWidths(colWidths);
+                        },
+                    );
+                }}
+            />
+        </div>
+
     );
 }
 
