@@ -28,6 +28,11 @@ const Layout = () => {
       label: '转置与冻结',
       description: '表格转置与行列冻结功能演示',
     },
+    {
+      path: '/demo5',
+      label: '灵活调整尺寸',
+      description: '行高列宽配置与自动换行功能',
+    },
   ];
 
   return (
