@@ -2,6 +2,9 @@ import { ListTable } from '@visactor/react-vtable';
 import { columns, records } from '../../utils/mock-data';
 import { useTheme } from 'ahooks';
 import { getCommonVTableTheme } from './utils/theme';
+import { Switch } from '@/components/ui/switch';
+import { Label } from '@/components/ui/label';
+import { Moon, Sun } from 'lucide-react';
 import './index.css';
 
 function Demo2() {
@@ -15,22 +18,22 @@ function Demo2() {
   return (
     <div className="demo2-container">
       <div className="demo2-header">
-        <div className="theme-switch">
-          <label className="switch">
-            <input
-              type="checkbox"
-              checked={isDark}
-              onChange={handleThemeToggle}
-            />
-            <span className="slider">
-              <span className="slider-text">
-                {isDark ? '🌙' : '☀️'}
-              </span>
-            </span>
-          </label>
-          <span className="theme-label">
-            {isDark ? '暗色模式' : '亮色模式'}
-          </span>
+        <div className="flex items-center gap-3 p-4 bg-white rounded-lg shadow-sm border">
+          <div className="flex items-center gap-2">
+            {isDark ? (
+              <Moon className="h-4 w-4 text-slate-600" />
+            ) : (
+              <Sun className="h-4 w-4 text-amber-500" />
+            )}
+            <Label htmlFor="theme-switch" className="text-sm font-medium">
+              {isDark ? '暗色模式' : '亮色模式'}
+            </Label>
+          </div>
+          <Switch
+            id="theme-switch"
+            checked={isDark}
+            onCheckedChange={handleThemeToggle}
+          />
         </div>
       </div>
       <ListTable
