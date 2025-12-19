@@ -1,5 +1,5 @@
 import { Outlet, Link, useLocation } from 'react-router-dom';
-import { 
+import {
   ChevronRight
 } from 'lucide-react';
 
@@ -8,20 +8,25 @@ const Layout = () => {
 
   // 菜单项配置 - 添加图标和描述
   const menuItems = [
-    { 
-      path: '/', 
-      label: '列宽计算', 
+    {
+      path: '/',
+      label: '列宽计算',
       description: '根据数据计算列宽与记忆拖拽宽度',
     },
-    { 
-      path: '/demo2', 
-      label: '主题配色', 
+    {
+      path: '/demo2',
+      label: '主题配色',
       description: '动态修改表格主题与配色',
     },
-    { 
-      path: '/demo3', 
-      label: 'AI 树形表', 
+    {
+      path: '/demo3',
+      label: 'AI 树形表',
       description: '指挥AI + MCP 实现一个树形结构表',
+    },
+    {
+      path: '/demo4',
+      label: '转置与冻结',
+      description: '表格转置与行列冻结功能演示',
     },
   ];
 
@@ -34,15 +39,15 @@ const Layout = () => {
           <div className="space-y-2">
             {menuItems.map((item) => {
               const isActive = location.pathname === item.path;
-              
+
               return (
                 <Link
                   key={item.path}
                   to={item.path}
                   className={`
                     group flex items-center px-3 py-3 text-sm font-medium rounded-lg transition-all duration-200
-                    ${isActive 
-                      ? 'bg-blue-50 text-blue-700 border-r-2 border-blue-600' 
+                    ${isActive
+                      ? 'bg-blue-50 text-blue-700 border-r-2 border-blue-600'
                       : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
                     }
                   `}
@@ -69,10 +74,8 @@ const Layout = () => {
       {/* 主内容区域 */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* 主要内容 */}
-        <main className="flex-1 overflow-aut">
-          <div className="p-6">
-            <Outlet />
-          </div>
+        <main className="flex-1 overflow-auto">
+          <Outlet />
         </main>
       </div>
     </div>
